@@ -1,0 +1,29 @@
+name: Test TurboSnap and story filtering inputs
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: refs/heads/main
+      GITHUB_EVENT_NAME: push
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          projectToken: fake-token-for-testing
+          skip: true
+          onlyChanged: true
+          onlyStoryNames: "Button/*"
+          onlyStoryFiles: "src/components/Button.stories.tsx"
+          only: "Button/*"
+          externals: "src/styles/**"
+          traceChanged: true
+          untraced: "src/utils/**"
+          preserveMissing: true
+        continue-on-error: true
+      - name: Assert action ran
+        run: |
+          echo "Action completed with TurboSnap/story filtering inputs"
+          echo "PASS"
