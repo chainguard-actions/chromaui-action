@@ -1,8 +1,0 @@
-{
-  "owner": "chromaui",
-  "name": "action",
-  "alias": "chromaui-action",
-  "visibility": "internal",
-  "description": "Publish your Storybook to Chromatic and run visual regression tests",
-  "block_publish": false
-}
