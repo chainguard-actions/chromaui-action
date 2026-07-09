@@ -1,14 +1,10 @@
-# chromaui/action
+# GitHub Action for Chromatic
 
-Publish your Storybook to Chromatic and run visual regression tests
+Builds and publishes your Storybook to Chromatic and runs visual regression tests.
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/chromaui/action](https://github.com/chromaui/action).
+📋 [Source code](https://github.com/chromaui/chromatic-cli) ∙ 📚 [Documentation](https://www.chromatic.com/docs/github-actions) ∙ 💬 [Support](https://www.chromatic.com/docs/support)
 
-## Versions
-
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v1 | [`v1`](https://github.com/chainguard-actions/chromaui-action/tree/v1) | — |
+> ⚠️ This repository is just a deployment target for the GitHub Action. Do not fork or create issues/PRs here.
 
 ## Privacy
 

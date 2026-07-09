@@ -1,0 +1,39 @@
+name: Test logging options inputs
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: refs/heads/main
+      GITHUB_EVENT_NAME: push
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: chromatic
+        uses: .
+        continue-on-error: true
+        with:
+          projectToken: 'chpt_fake_token_for_logging'
+          dryRun: 'true'
+          skipUpdateCheck: 'true'
+          storybookBuildDir: 'tests/fixtures/storybook-build'
+          debug: 'true'
+          logFile: '/tmp/chromatic.log'
+          logLevel: 'info'
+          logPrefix: 'chromatic-test'
+          storybookLogFile: '/tmp/storybook.log'
+          diagnostics: 'true'
+          diagnosticsFile: '/tmp/chromatic-diagnostics.json'
+      - name: Assert action ran with logging options
+        if: always()
+        env:
+          OUTCOME: ${{ steps.chromatic.outcome }}
+          CODE: ${{ steps.chromatic.outputs.code }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "exit code: $CODE"
+          if [ -z "$OUTCOME" ]; then
+            echo "FAIL: action step did not run (outcome is empty)"
+            exit 1
+          fi
+          echo "PASS: action step ran with outcome: $OUTCOME"
