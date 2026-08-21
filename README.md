@@ -8,7 +8,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
-| v1 | [`v1`](https://github.com/chainguard-actions/chromaui-action/tree/v1) | — |
+| v1 | [`v1`](https://github.com/chainguard-actions/chromaui-action/tree/v1) | [`c93e0bc`](https://github.com/chromaui/action/commit/c93e0bc3a63aa176e14a75b61a31847cbfdd341c) |
 | v11.27.0 | [`v11.27.0`](https://github.com/chainguard-actions/chromaui-action/tree/v11.27.0) | [`c93e0bc`](https://github.com/chromaui/action/commit/c93e0bc3a63aa176e14a75b61a31847cbfdd341c) |
 
 ## Privacy
