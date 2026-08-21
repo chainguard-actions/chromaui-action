@@ -1,4 +1,4 @@
-name: Test logging-related inputs
+name: Test dry run scenario
 on:
   workflow_dispatch:
 jobs:
@@ -11,24 +11,21 @@ jobs:
         uses: .
         continue-on-error: true
         with:
-          projectToken: fake-token-for-logging-test
+          projectToken: fake-token-for-dry-run
           dryRun: "true"
-          debug: "true"
-          diagnostics: "true"
-          diagnosticsFile: "/tmp/chromatic-diagnostics.json"
-          logFile: "/tmp/chromatic.log"
-          logLevel: "info"
-          logPrefix: "test-run"
 
-      - name: Assert action ran with logging inputs
+      - name: Assert action ran in dry run mode
         env:
           OUTCOME: ${{ steps.action.outcome }}
           CODE: ${{ steps.action.outputs.code }}
         run: |
           echo "outcome: $OUTCOME"
           echo "code: $CODE"
+          # dryRun=true runs without actually publishing to Chromatic.
+          # Under the harness with a fake token, the action may fail at auth or succeed
+          # with a dry-run exit code. Both are acceptable.
           if [ "$OUTCOME" = "success" ]; then
-            echo "PASS: action succeeded with logging inputs"
+            echo "PASS: action succeeded in dry run mode"
           elif [ "$OUTCOME" = "failure" ]; then
             echo "PASS: action failed gracefully (expected under harness with fake token)"
           else

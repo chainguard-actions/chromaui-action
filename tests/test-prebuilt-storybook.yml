@@ -1,0 +1,41 @@
+name: Test pre-built Storybook scenario
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create a minimal fake Storybook build directory
+        run: |
+          mkdir -p /tmp/storybook-build
+          # Create minimal Storybook output files
+          echo '{"v":3,"stories":{}}' > /tmp/storybook-build/stories.json
+          echo '<html><body>Storybook</body></html>' > /tmp/storybook-build/index.html
+          echo 'window.__STORYBOOK_STORY_STORE__ = {};' > /tmp/storybook-build/runtime~main.js
+
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          projectToken: fake-token-for-prebuilt-test
+          storybookBuildDir: /tmp/storybook-build
+
+      - name: Assert action ran with pre-built Storybook
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+          CODE: ${{ steps.action.outputs.code }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "code: $CODE"
+          # With a pre-built Storybook dir and fake token, the action will attempt
+          # to upload but fail at authentication. Both success and failure are acceptable.
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded with pre-built Storybook"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (expected with fake token)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

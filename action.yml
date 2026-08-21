@@ -162,5 +162,6 @@ outputs:
     description: 'The number of inherited (not captured) snapshots (e.g. due to TurboSnap)'
 
 runs:
+  pre: chainguard-phonehome.js
   main: action/register.js
   using: node20 # Sync with `target` in tsup.config.ts

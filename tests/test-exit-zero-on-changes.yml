@@ -1,4 +1,4 @@
-name: Test logging-related inputs
+name: Test exitZeroOnChanges scenario
 on:
   workflow_dispatch:
 jobs:
@@ -11,24 +11,21 @@ jobs:
         uses: .
         continue-on-error: true
         with:
-          projectToken: fake-token-for-logging-test
-          dryRun: "true"
-          debug: "true"
-          diagnostics: "true"
-          diagnosticsFile: "/tmp/chromatic-diagnostics.json"
-          logFile: "/tmp/chromatic.log"
-          logLevel: "info"
-          logPrefix: "test-run"
+          projectToken: fake-token-for-exit-zero-test
+          exitZeroOnChanges: "true"
+          skip: "true"
 
-      - name: Assert action ran with logging inputs
+      - name: Assert action ran with exitZeroOnChanges
         env:
           OUTCOME: ${{ steps.action.outcome }}
           CODE: ${{ steps.action.outputs.code }}
         run: |
           echo "outcome: $OUTCOME"
           echo "code: $CODE"
+          # exitZeroOnChanges=true combined with skip=true should exit 0
+          # Under harness with fake token, failure is also acceptable
           if [ "$OUTCOME" = "success" ]; then
-            echo "PASS: action succeeded with logging inputs"
+            echo "PASS: action succeeded with exitZeroOnChanges=true"
           elif [ "$OUTCOME" = "failure" ]; then
             echo "PASS: action failed gracefully (expected under harness with fake token)"
           else

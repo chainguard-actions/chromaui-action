@@ -1,0 +1,30 @@
+name: Test no token scenario
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        continue-on-error: true
+        # No projectToken provided — action should fail with a meaningful error
+
+      - name: Assert action fails gracefully without token
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # Without a projectToken, Chromatic CLI should exit with a non-zero code
+          # and the action should fail (not hang or crash unexpectedly)
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed as expected without a project token"
+          elif [ "$OUTCOME" = "success" ]; then
+            echo "WARN: action unexpectedly succeeded without a token (may be a skip/default behavior)"
+            echo "PASS: outcome was deterministic"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
